@@ -1,0 +1,24 @@
+{
+  "$id": "contact.schema.json",
+  "title": "Contact",
+  "description": "Schema for a contact",
+  "type": "object",
+  "properties": {
+    "person": {
+      "$ref": "person.schema.json"
+    },
+    "address": {
+      "$ref": "address.schema.json"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "The contact's email address."
+    }
+  },
+  "required": [
+    "person",
+    "address",
+    "email"
+  ]
+}

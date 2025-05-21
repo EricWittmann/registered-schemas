@@ -1,0 +1,30 @@
+{
+  "$id": "address.schema.json",
+  "title": "Address",
+  "description": "Schema for an address",
+  "type": "object",
+  "properties": {
+    "streetAddress": {
+      "type": "string",
+      "description": "The street address."
+    },
+    "city": {
+      "type": "string",
+      "description": "The city."
+    },
+    "state": {
+      "type": "string",
+      "description": "The state."
+    },
+    "postalCode": {
+      "type": "string",
+      "description": "The postal code."
+    }
+  },
+  "required": [
+    "streetAddress",
+    "city",
+    "state",
+    "postalCode"
+  ]
+}

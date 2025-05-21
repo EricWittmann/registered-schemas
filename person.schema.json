@@ -1,0 +1,25 @@
+{
+  "$id": "person.schema.json",
+  "title": "Person",
+  "description": "Schema for a person",
+  "type": "object",
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "description": "The person's first name."
+    },
+    "lastName": {
+      "type": "string",
+      "description": "The person's last name."
+    },
+    "age": {
+      "type": "integer",
+      "description": "The person's age in years.",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "firstName",
+    "lastName"
+  ]
+}
