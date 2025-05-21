@@ -1,14 +1,15 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "$id": "contact.schema.json",
   "title": "Contact",
   "description": "Schema for a contact",
   "type": "object",
   "properties": {
     "person": {
-      "$ref": "person.schema.json"
+      "$ref": "./person.schema.json"
     },
     "address": {
-      "$ref": "address.schema.json"
+      "$ref": "./address.schema.json"
     },
     "email": {
       "type": "string",

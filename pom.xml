@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>registry-schemas</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <apicurio-registry.version>3.0.8-SNAPSHOT</apicurio-registry.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-registry-maven-plugin</artifactId>
+            <version>${apicurio-registry.version}</version>
+            <type>maven-plugin</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.apicurio</groupId>
+                <artifactId>apicurio-registry-maven-plugin</artifactId>
+                <version>${apicurio-registry.version}</version>
+                <executions>
+                    <execution>
+                        <id>register-artifact</id>
+                        <goals>
+                            <goal>register</goal>
+                        </goals>
+                        <phase>process-test-resources</phase>
+                        <configuration>
+                            <registryUrl>http://localhost:8080/apis/registry/v3</registryUrl>
+                            <artifacts>
+                                <artifact>
+                                    <groupId>all-artifacts</groupId>
+                                    <artifactId>contact.schema.json</artifactId>
+                                    <version>1.0</version>
+                                    <artifactType>JSON</artifactType>
+                                    <file>${project.basedir}/contact.schema.json</file>
+                                    <ifExists>FIND_OR_CREATE_VERSION</ifExists>
+                                    <canonicalize>true</canonicalize>
+                                    <analyzeDirectory>true</analyzeDirectory>
+                                    <autoRefs>true</autoRefs>
+                                </artifact>
+                            </artifacts>
+                            <existingReferences/>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

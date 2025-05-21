@@ -1,9 +1,10 @@
-name: Main Workflow
+name: Create Registry Workflow
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -13,5 +14,46 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Run a script
-        run: echo "Hello, world!"
+      - name: Set up Java and Maven
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Start Apicurio Registry (Loader Instance)
+        run: |
+          docker pull apicurio/apicurio-registry:latest-release
+          docker run -d -p 8080:8080 --name apicurio-registry-loader apicurio/apicurio-registry:latest-release
+          sleep 5  # Give the registry time to start
+
+      - name: Register schemas
+        run: mvn clean install
+
+      - name: Export Registry content
+        run: |
+          curl -X GET http://localhost:8080/apis/registry/v3/admin/export -o registry-export.zip
+
+      - name: Stop Apicurio Registry (Loader Instance)
+        run: docker stop apicurio-registry-loader
+
+      - name: Build Docker image
+        run: |
+          docker build -t registered-schemas .
+          docker tag registered-schemas:latest TotallyRealCompany/registered-schemas:latest
+
+      # - name: Login to Docker Hub
+      #   run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      # - name: Push Docker image
+      #   run: docker push TotallyRealCompany/registered-schemas:latest
+
+      - name: Start "Registered Schemas" Container Image
+        run: |
+          docker pull TotallyRealCompany/registered-schemas:latest
+          docker run -d -p 8080:8080 --name registered-schemas TotallyRealCompany/registered-schemas:latest
+          sleep 5  # Give the registry time to start
+
+      - name: Verify Registry Has Content
+        run: |
+          curl -X GET http://localhost:8080/apis/registry/v3/search/artifacts
